@@ -1,0 +1,342 @@
+# Candidate glossary terms, harvested from transcripts.
+#
+# No prompt reads this file. No renderer reads this file. It is a work queue.
+#
+# Fields
+# ------
+#   token             The string exactly as it appears on the page. Never normalized.
+#   kind_guess        Triage only: uppercase | surname | part-prefix | phrase.
+#   pages             Pages carrying the token.
+#   ab_agree          Pages where pass A and pass B read the token identically.
+#   misread_pages     Pages where raw output disagrees with VERIFIED text. Null until pages
+#                     are verified. This is the number the solo bump trigger needs.
+#   est_pages_fixed   (misread_pages / pages) * corpus_pages. Null while misread_pages is.
+#   scans             scan_ids carrying it.
+#   disposition       open | promoted | rejected
+#   note              Evidence, ambiguity, or the glossary id it was promoted to.
+#
+# Provenance of this batch
+# ------------------------
+# Harvested from six RAW pages (005, 010, 015, 020, 025, 030) at glossary_version 0-2-0,
+# using A/B agreement as a stand-in for verification. That stand-in is weaker than it looks:
+# both passes ran the same model on the same prompt, so agreement filters random misreads
+# and not correlated ones. Two passes can be confidently wrong together. Nothing here is
+# promoted; every token still needs a human eye on the scan.
+#
+# The blind spot stands. This queue holds only tokens that reached a transcript. A term the
+# model mangled past recognition is not here, and those are worth the most.
+
+version: 0.3.0
+harvested_through: "030"
+harvest_basis: raw-ab-agreement   # NOT verified; see above
+corpus_pages: 130
+
+candidates:
+  - token: "GAEC"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      Grumman Aircraft Engineering Corporation. The expansion is printed in the letterhead of every page in this corpus, so this one is sourceable without an external document. Ready to promote.
+
+  - token: "C/L"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["010"]
+    disposition: open
+    note: >
+      Check List. Scan 010 has 'Precheckout Prep C/L'; scan 020 spells out 'Pre Checkout Prep Check List' for the same procedure. Cross-page internal evidence. Ready to promote.
+
+  - token: "LSK"
+    kind_guess: part-prefix
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["005"]
+    disposition: open
+    note: >
+      Sibling prefix to LDW, same number shape (LSK 560-1024-21, -19, -23). Appears in the same sentence as an LDW number, so the two series are distinct and both in active use.
+
+  - token: "TDR"
+    kind_guess: uppercase
+    pages: 2
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["025", "030"]
+    disposition: open
+    note: >
+      ALREADY IN GLOSSARY with expansion open. Heavy use, #2 through #24 across two pages. Context favors Test Discrepancy Report over Technical Directive Request: they are raised against test sequences and then 'sold off', which is discrepancy language. Contextual, not a citation. Highest-frequency open term in the sample.
+
+  - token: "ACE"
+    kind_guess: uppercase
+    pages: 2
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["010", "020"]
+    disposition: open
+    note: >
+      'ACE ROOM' on 010 and 'ACE 3' as a location on 020. Almost certainly the Apollo checkout equipment complex; needs a period source for the expansion.
+
+  - token: "STE"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      Twice on one page, both times as an actor: notifies the GSE group, deviates sequences out. A role, not equipment. Pass A renders it 'StE' once.
+
+  - token: "LCR"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      'LCR'S 1694, 2529 & 2685 CONSTRAINT THE RUNNING SEQUENCE'. A numbered document that can block a test sequence.
+
+  - token: "LTS"
+    kind_guess: uppercase
+    pages: 2
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["010", "020"]
+    disposition: open
+    note: >
+      'LTS PNL1' on 010, 'Seq. 004 (LTS Set up)' on 020. Lighting-related. Sits beside LTG on 020, so the two are probably not the same thing.
+
+  - token: "LTG"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      'questions relative to LTG & AC Power'. Adjacent to LTS on the same page.
+
+  - token: "C/W"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      'C/W Lts' - caution and warning lights. Directly related to the master-alarm entry already in the glossary; promote with a see_also.
+
+  - token: "C/O"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      'EPS C/O Controller'. Checkout, almost certainly, but keep it distinct from C/L.
+
+  - token: "BOB"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015"]
+    disposition: open
+    note: >
+      'GATHERING BOB's & CABLES'. Countable hardware gathered for a test. Break-out box is the obvious reading and is unconfirmed.
+
+  - token: "P/J"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015"]
+    disposition: open
+    note: >
+      'MATE P/J 953', 'Trouble mating P/J 953'. A mated connector pair.
+
+  - token: "LCA"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["005"]
+    disposition: open
+    note: >
+      'FEED THE 1024-19 & -23 CABLES THROUGH TO THE LCA AREA'. A named location inside the cabin that cables route to.
+
+  - token: "RTRS"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      'Seq. 041-010 asks verification that RTRS is ready'. A system with a readiness state.
+
+  - token: "TPER"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["030"]
+    disposition: open
+    note: >
+      'TIME/SEQUENCE CHART FOR TPER ON 62000-EPS-LM5'. Both passes agree on the spelling, which is the only reason it is here rather than filed as a misread.
+
+  - token: "S/B"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["010"]
+    disposition: open
+    note: >
+      '(S/B 113)' correcting a voltage in the text. Should be.
+
+  - token: "Crab"
+    kind_guess: phrase
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015"]
+    disposition: open
+    note: >
+      'Issued Crab # 572 for vehicle fix' and 'incl. crab delay'. Numbered like a document, and it caused a work stoppage. Both passes read it as an ordinary word, which is exactly the correlated error A/B agreement cannot catch. Check the scan.
+
+  - token: "ED"
+    kind_guess: uppercase
+    pages: 1
+    ab_agree: 1
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015"]
+    disposition: open
+    note: >
+      'UPON COMPLETION OF ED TPS 35-1040' - a qualifier on a TPS number. Two characters, so it needs match: none regardless of what it turns out to mean.
+
+  - token: "sell off"
+    kind_guess: phrase
+    pages: 2
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["025", "030"]
+    disposition: open
+    note: >
+      'SOLD OFF TDR # 9 & # 10', 'THIS INFO WILL SELL OFF #7', 'SOLD TDR'S # 16, 18, 22...'. Shop jargon for closing a discrepancy with QA concurrence. A reader will not guess it.
+
+  - token: "E. HOMBURGER"
+    kind_guess: surname
+    pages: 3
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015", "025", "030"]
+    disposition: open
+    note: >
+      Not in the glossary, and the most frequent new name in the sample - three of six pages, twice as the header Engineer. Scan 025 pass B reads '[?HAMBURGER]' against pass A's '[?HOMBURGER]', so the model is already unstable on it. Likeliest solo-bump candidate once you have verified pages to measure against.
+
+  - token: "Sal Deliberto"
+    kind_guess: surname
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015"]
+    disposition: open
+    note: >
+      'Sal Deliberto (GSE) informed us he will get relocation workorders written'.
+
+  - token: "Steve Cacace"
+    kind_guess: surname
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015"]
+    disposition: open
+    note: >
+      'Steve Cacace, Tech.' on the night-shift crew line.
+
+  - token: "Steve Bauer"
+    kind_guess: surname
+    pages: 1
+    ab_agree: 0
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015"]
+    disposition: open
+    note: >
+      CONFLICT. Pass A reads 'Steve Bauer, QC'; pass B reads 'Steve [?Bauer|Fauer]'. S. Fauer is already in the glossary from scan 025. If Bauer is correct, the existing Fauer entry may pull future runs toward the wrong name - the promotion-hurts case, live. Resolve against the scan before any bump.
+
+  - token: "DeMartino"
+    kind_guess: surname
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["015"]
+    disposition: open
+    note: >
+      'New QC : DeMartino', replacing a QC man mid-shift.
+
+  - token: "E. BACA"
+    kind_guess: surname
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      'CHECK WITH E. BACA OF NASA'. NASA side, not Grumman.
+
+  - token: "BILL SMITH"
+    kind_guess: surname
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["020"]
+    disposition: open
+    note: >
+      Marginal insertion at the top of the page.
+
+  - token: "L.M. TUCKER"
+    kind_guess: surname
+    pages: 1
+    ab_agree: 2
+    misread_pages: null
+    est_pages_fixed: null
+    scans: ["025"]
+    disposition: open
+    note: >
+      'L.M.TUCKER OF 053'. The reason L.M. was removed from the LM entry's variants.
+

@@ -1,0 +1,549 @@
+# Glossary for the LM-5 construction log edition.
+#
+# This file has two consumers, and every field exists to serve one or both:
+#
+#   1. The transcription prompt. `term`, `variants`, and `examples` become the domain
+#      vocabulary handed to the model. Nothing else in this file goes into the prompt --
+#      definitions would give the model narrative context, which is what makes it invent.
+#      Never list a variant you have not seen on a scan. Vocabulary you supply is
+#      vocabulary the model can produce.
+#   2. The site build. The renderer links occurrences in the displayed HTML and shows
+#      `expansion` and `definition` on hover.
+#
+# The glossary never touches transcript bytes. Linking happens at render time, against a
+# copy. A term in this file is a claim about what the writer meant, not a license to change
+# what the writer wrote.
+#
+# How a term gets into this file
+# ------------------------------
+# Never from raw model output. This file is prompt input, so anything the model writes into
+# it becomes vocabulary the model reads back on the next page, and a single misread surname
+# turns into 120 pages of consistent-looking corroboration.
+#
+#   1. `tools/harvest.py` scans transcripts with `status: verified` and appends unrecognized
+#      uppercase tokens, repeated capitalized surnames, and part-number-shaped strings to
+#      `reference/candidates.yml`, with the scan_id that produced each one. A human has
+#      already read those pages against the scan, so the string is known to exist.
+#   2. You promote a candidate by hand, writing the definition yourself.
+#   3. `version` below bumps, on either trigger below.
+#
+# Nothing reads `candidates.yml` except you.
+#
+# Bump triggers
+# -------------
+# A bump costs a re-run of every stale page, so the question is what a bump buys. Two rules,
+# whichever fires first:
+#
+#   - **Batch.** Ten or more promoted terms are waiting. Cheap terms ride along free.
+#   - **Solo.** One term's `est_pages_fixed` in `candidates.yml` reaches 15, about a tenth of
+#     the corpus. A frequent surname the model currently garbles clears this alone; a
+#     frequent term it already reads correctly never does, because vocabulary it does not
+#     need changes nothing.
+#
+# `est_pages_fixed` is coverage times current error rate, both measured from the raw-versus-
+# verified diff you already produce. Frequency alone is the wrong signal.
+#
+# Version bumps and re-runs
+# -------------------------
+# `version` here is recorded per transcript as `glossary_version` in the frontmatter. It is a
+# separate axis from `prompt_version`, which covers the prompt template and the conventions
+# it cites. Vocabulary changes often; transcription rules should not. Conflating them makes
+# `prompt_version` churn until it stops meaning anything.
+#
+# A page whose `glossary_version` is behind this one is stale. On a bump:
+#
+#   1. Re-run every stale page, including verified ones. Verified pages are the point --
+#      they are the only ground truth you have, and re-running them measures whether the
+#      promoted terms helped.
+#   2. Write output to `raw/{scan_id}.g{glossary_version}.md`. Never overwrite an earlier
+#      raw file and never write over a verified transcript. Machine output does not clobber
+#      human work, and keeping every run is what makes runs comparable.
+#   3. Diff each new raw file against the verified text. Record the disagreement rate per
+#      bump.
+#   4. Review divergences in both directions. New vocabulary can hurt: a term the model
+#      previously left as `[illegible]` is a term it can now confidently place on a page
+#      that never carried it. A divergence is a question, not a correction.
+#
+# Stop bumping when the disagreement rate stops falling. Bump-and-re-run has no natural
+# terminus otherwise.
+#
+# Linking policy
+# --------------
+#   - Matching is case-sensitive. `CM` matches, `cm` does not.
+#   - Matching respects word boundaries.
+#   - Longest match wins. `LM-5` on the page links to `lm-5`, never to `lm` plus a stray 5.
+#   - The renderer links the first occurrence per page only. Otherwise `S/N` decorates every
+#     third line of a parts log.
+#
+# Field reference
+# ---------------
+#   id          Slug, lowercase, unique. Stable forever -- annotations and URLs cite it.
+#               People are `surname-initial` or `surname-firstname`, so the file sorts by
+#               surname.
+#   term        The canonical form, spelled as it most often appears on the page.
+#   kind        abbreviation | part-prefix | person | component | phrase | symbol | procedure
+#   expansion   What the letters stand for, or a person's full name. Null when unknown --
+#               never guess here. An unsourced guess in this field is indistinguishable
+#               from a fact once it reaches a tooltip.
+#   definition  One or two sentences for a reader who is not an aerospace historian. When
+#               `expansion` is null, state the candidate readings and why they are open.
+#   variants    Other spellings seen on pages. Matched literally, same as `term`.
+#   match       literal | none
+#               `none` means prompt vocabulary only; the renderer skips it. Use it when the
+#               term collides with ordinary text, not because the term is short.
+#   pattern     ECMAScript regex for `kind: part-prefix`, where the term is a shape rather
+#               than a fixed string. Null otherwise.
+#   examples    Real strings as they appear on scans. Grounds the pattern and feeds the
+#               prompt. Cite the scan_id in a trailing comment when you add one.
+#   source      Citation for the expansion -- document, page, or archive reference. A term
+#               with a citation is settled. A term with `source: null` is an open question,
+#               and that is the only difference between the two. CI fails a release build on
+#               any null source; it does not fail a commit, so you can add terms faster than
+#               you can source them.
+#   first_seen  scan_id of the earliest page carrying the term. Optional.
+#   see_also    List of ids.
+#
+# Conventions: Unicode NFC, LF endings, two-space indent, keys in the order above,
+# entries sorted by `id`.
+
+version: 0.2.0
+conventions_version: 0.4.0-draft
+
+terms:
+  - id: beuregard-a
+    term: A. Beuregard
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Beuregard
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: cb
+    term: CB
+    kind: abbreviation
+    expansion: Circuit Breaker
+    definition: >
+      A resettable panel breaker. The LM carried banks of them on the cabin sidewall panels,
+      so wiring and power entries reference individual breakers by panel and position.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: cdr
+    term: CDR
+    kind: abbreviation
+    expansion: null
+    definition: >
+      Open. In flight documents CDR is the Commander's crew station, the left-hand position
+      in the cabin, which fits entries about panels, controls, and window hardware. In
+      program paperwork it is more often Critical Design Review, which fits entries about
+      drawings and signoffs. Check which sense your pages use before filling this in; the
+      two readings send a reader in opposite directions.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: cm
+    term: CM
+    kind: abbreviation
+    expansion: null
+    definition: >
+      Open. Command Module fits entries about docking, the tunnel, and interface hardware.
+      Configuration Management fits entries about drawing revisions and change control. Both
+      are plausible in a Grumman build log.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: dowse-ed
+    term: Ed Dowse
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Dowse
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: ecs
+    term: ECS
+    kind: abbreviation
+    expansion: Environmental Control System
+    definition: >
+      The LM subsystem handling cabin pressure, oxygen supply, carbon dioxide removal, and
+      thermal control of the crew compartment and equipment.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: eph
+    term: EPH
+    kind: abbreviation
+    expansion: null
+    definition: >
+      Open, and not a standard Apollo-program abbreviation. Likely a Grumman in-house
+      paperwork series, possibly related to EPO. Needs a period document.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also:
+      - epo
+
+  - id: epo
+    term: EPO
+    kind: abbreviation
+    expansion: null
+    definition: >
+      Open. The flight-program reading, Earth Parking Orbit, does not fit a manufacturing
+      log. More likely a Grumman engineering paperwork series -- an order or authorization
+      of some kind. Needs a period document.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also:
+      - eph
+
+  - id: eps
+    term: EPS
+    kind: abbreviation
+    expansion: Electrical Power System
+    definition: >
+      The LM subsystem covering batteries, power distribution, and the buses feeding the
+      other subsystems.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also:
+      - cb
+
+  - id: fauer-s
+    term: S. Fauer
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Fauer
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: fcs
+    term: FCS
+    kind: abbreviation
+    expansion: Flight Control System
+    definition: >
+      The subsystem translating guidance commands and crew hand-controller inputs into
+      engine and thruster commands.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: fleisig-ross
+    term: Ross Fleisig
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Fleisig
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: gse
+    term: GSE
+    kind: abbreviation
+    expansion: Ground Support Equipment
+    definition: >
+      Test sets, handling fixtures, carts, and stands used to build and check out the
+      vehicle. GSE never flies, so a GSE fault in the log is a problem with the test rig
+      rather than with the spacecraft.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: hebel-t
+    term: T. Hebel
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Hebel
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: hecht-a
+    term: A. Hecht
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Hecht
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: ldw
+    term: LDW
+    kind: part-prefix
+    expansion: null
+    definition: >
+      Open. A Grumman drawing- or part-number prefix used on LM hardware. The expansion is
+      unconfirmed. The number format is not: a three-digit group, a five-digit group, then
+      one or more dash-suffixed part identifiers. LSK numbers on the same page share the
+      shape, so the prefix distinguishes series rather than format.
+    variants: []
+    match: pattern
+    pattern: \bLDW ?\d{3}-\d{5}(?:-\d+)*\b
+    examples:
+      - LDW 410-11373-1     # scan 005
+      - LDW 410-11372-9-2   # scan 005
+    source: null
+    first_seen: null
+    see_also:
+      - sn
+
+  - id: lm
+    term: LM
+    kind: abbreviation
+    expansion: Lunar Module
+    definition: >
+      The two-stage spacecraft that carried two crew members from lunar orbit to the surface
+      and back. Grumman built it under NASA contract. Early program documents call it the
+      LEM, for Lunar Excursion Module; NASA dropped "Excursion" in the mid-1960s. Do not add
+      `L.M.` as a variant -- scan 025 carries "L.M.TUCKER", a technician's initials, and the
+      linker would tag him as the spacecraft.
+    variants: []
+    match: literal
+    pattern: null
+    examples:
+      - LM 5           # scan 015 header
+      - LM-6           # scan 010
+      - LM-3           # scan 005
+    source: null
+    first_seen: null
+    see_also:
+      - lm-5
+
+  - id: lm-5
+    term: LM-5
+    kind: abbreviation
+    expansion: null
+    definition: >
+      The specific flight article these logs document: the fifth production Lunar Module,
+      flown on Apollo 11 and named Eagle. The logs also reference sibling articles -- LM-3,
+      LM-4, LM-6 -- so LM-5 is not safe to assume from context alone.
+    variants:
+      - LM 5
+      - LM5
+    match: literal
+    pattern: null
+    examples:
+      - "62000-EPS-LM5"   # scan 030
+      - "LM5-14050"       # scan 030
+    source: null
+    first_seen: null
+    see_also:
+      - lm
+
+  - id: master-alarm
+    term: Master Alarm
+    kind: component
+    expansion: null
+    definition: >
+      The caution and warning system's top-level annunciator: a lit pushbutton on the panel
+      plus an audible tone, triggered by any condition the system treats as critical.
+      Pressing it silences the tone without clearing the underlying caution light.
+    variants:
+      - MASTER ALARM
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: ocp
+    term: OCP
+    kind: abbreviation
+    expansion: Operational Checkout Procedure
+    definition: >
+      A written step-by-step procedure for checking out a subsystem. Log entries usually
+      cite an OCP by number rather than restating its steps.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also:
+      - tps
+
+  - id: qc
+    term: QC
+    kind: abbreviation
+    expansion: Quality Control
+    definition: >
+      The inspection function that witnesses and signs off work. A QC stamp or initial in
+      the inspection column is what makes an entry closed. Grumman QC and NASA QC are
+      separate functions and the logs distinguish them.
+    variants:
+      - Q.C.
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also:
+      - tps
+
+  - id: rabinowitz-a
+    term: A. Rabinowitz
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Rabinowitz
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: sarbello-s
+    term: S. Sarbello
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Sarbello
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: sn
+    term: S/N
+    kind: abbreviation
+    expansion: Serial Number
+    definition: >
+      Prefixes the serial of an individual part. The serial identifies one physical article,
+      as distinct from a drawing or part number identifying a design.
+    variants:
+      - SN
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also:
+      - ldw
+
+  - id: stonehouse-r
+    term: R. Stonehouse
+    kind: person
+    expansion: null
+    definition: null
+    variants:
+      - Stonehouse
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also: []
+
+  - id: tdr
+    term: TDR
+    kind: abbreviation
+    expansion: null
+    definition: >
+      Open. Test Discrepancy Report is the common manufacturing-QA reading and fits a log
+      that records faults found during checkout. Technical Directive Request is also current
+      in Apollo-era contractor paperwork.
+    variants: []
+    match: literal
+    pattern: null
+    examples: []
+    source: null
+    first_seen: null
+    see_also:
+      - qc
+
+  - id: tps
+    term: TPS
+    kind: abbreviation
+    expansion: Test Preparation Sheet
+    definition: >
+      A numbered work authorization covering one test or task. A technician signs a TPS off
+      when the work it describes is complete, so log entries often name a TPS number instead
+      of describing the work.
+    variants: []
+    match: literal
+    pattern: null
+    examples:
+      - TPS 35-923      # scan 015
+      - TPS 35-1040     # scan 015
+    source: null
+    first_seen: null
+    see_also:
+      - ocp
+      - qc
