@@ -1,0 +1,18 @@
+---
+pagination:
+  data: pages
+  size: 1
+  alias: page_record
+permalink: "/page/{{ page_record.number }}/"
+---
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Page {{ page_record.number }}</title></head>
+<body>
+<h1>Page {{ page_record.number }}</h1>
+<p>Status: {{ page_record.status }}</p>
+<img src="/scans/{{ page_record.scanId }}.jpg" alt="Scan of page {{ page_record.number }}">
+<div class="transcript">{{ page_record.text | transcript | safe }}</div>
+<a href="/page/{{ page_record.number }}/transcript.txt">Plain text</a>
+</body>
+</html>
