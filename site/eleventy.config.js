@@ -1,6 +1,4 @@
-import markdownIt from "markdown-it";
-
-const md = markdownIt({ html: false, breaks: true, linkify: false });
+import { renderTranscript, renderPlainText } from "./_lib/transcript.js";
 
 export default function (eleventyConfig) {
   eleventyConfig.setInputDirectory("site");
@@ -8,11 +6,22 @@ export default function (eleventyConfig) {
   eleventyConfig.setIncludesDirectory("_includes");
   eleventyConfig.setDataDirectory("_data");
 
-  eleventyConfig.addPassthroughCopy({ "scans": "scans" });
+  // _lib holds modules the data files import. Eleventy would otherwise try to
+  // treat anything under the input directory as content.
+  eleventyConfig.ignores.add("site/_lib/**");
 
-  eleventyConfig.addFilter("transcript", (text) => md.render(text ?? ""));
+  eleventyConfig.addPassthroughCopy({ scans: "scans" });
+  eleventyConfig.addPassthroughCopy({ "site/assets": "assets" });
+
+  eleventyConfig.addFilter("transcript", function (record) {
+    return renderTranscript(record.text, { sourceFile: record.sourceFile });
+  });
+
+  eleventyConfig.addFilter("plaintext", function (record) {
+    return renderPlainText(record.text, { sourceFile: record.sourceFile });
+  });
+
+  eleventyConfig.addFilter("countStatus", (pages, status) =>
+    pages.filter((p) => p.status === status).length,
+  );
 }
-
-export const config = {
-  pathPrefix: "/LM-5_Grumman_Construction_Log/",
-};

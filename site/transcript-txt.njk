@@ -1,0 +1,13 @@
+---
+pagination:
+  data: pages
+  size: 1
+  alias: rec
+permalink: "/page/{{ rec.scanId }}/transcript.txt"
+eleventyExcludeFromCollections: true
+---
+# LM-5 construction log, page {{ rec.scanId }}
+# Status: {{ rec.status }} — {{ statusBlurb[rec.status] }}
+# Source: {{ rec.sourceFile }}
+
+{{ rec | plaintext }}

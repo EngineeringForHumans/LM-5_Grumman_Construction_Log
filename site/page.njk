@@ -2,17 +2,43 @@
 pagination:
   data: pages
   size: 1
-  alias: page_record
-permalink: "/page/{{ page_record.number }}/"
+  alias: rec
+permalink: "/page/{{ rec.scanId }}/"
 ---
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><title>Page {{ page_record.number }}</title></head>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page {{ rec.scanId }} ({{ rec.status }} transcript) — LM-5 construction log</title>
+<meta name="description" content="{{ statusBlurb[rec.status] }}">
+{% if rec.status == "unreviewed" or rec.status == "untranscribed" %}
+<meta name="robots" content="noindex">
+{% endif %}
+<link rel="stylesheet" href="/assets/log.css">
+</head>
 <body>
-<h1>Page {{ page_record.number }}</h1>
-<p>Status: {{ page_record.status }}</p>
-<img src="/scans/{{ page_record.scanId }}.jpg" alt="Scan of page {{ page_record.number }}">
-<div class="transcript">{{ page_record.text | transcript | safe }}</div>
-<a href="/page/{{ page_record.number }}/transcript.txt">Plain text</a>
+<main>
+<h1>Page {{ rec.scanId }}</h1>
+
+<p class="status status-{{ rec.status }}">{{ statusBlurb[rec.status] }}</p>
+
+{% if rec.status != "untranscribed" %}
+<img src="/scans/{{ rec.scanId }}.jpg" alt="Scan of page {{ rec.scanId }}">
+<div class="transcript">{{ rec | transcript | safe }}</div>
+
+<p class="provenance">
+Machine transcription, prompt {{ rec.provenance.promptVersion }},
+glossary {{ rec.provenance.glossaryVersion }},
+conventions {{ rec.provenance.conventionsVersion }}{% if rec.provenance.pass %}, pass {{ rec.provenance.pass }}{% endif %}.
+{% if rec.provenance.reviewedAt %}Checked against the scan on {{ rec.provenance.reviewedAt }}.{% endif %}
+Source: <code>{{ rec.sourceFile }}</code>.
+</p>
+
+<p><a href="/page/{{ rec.scanId }}/transcript.txt">Plain text</a></p>
+{% else %}
+<p>This page has no transcript yet.</p>
+{% endif %}
+</main>
 </body>
 </html>

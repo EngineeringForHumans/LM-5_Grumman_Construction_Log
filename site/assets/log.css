@@ -1,0 +1,210 @@
+/* The transcript is machine output until a person says otherwise, and the
+   design's whole job is to keep that distinction visible. The seam block is
+   the loud element; everything else stays quiet. */
+
+:root {
+  --paper: #f6f6f4;
+  --ink: #1c2024;
+  --ink-soft: #5a6068;
+  --rule: #d3d5d1;
+  --seam: #2f5d8c;
+  --seam-wash: #eaf0f6;
+  --unreviewed: #8a6510;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1.25rem 5rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1rem/1.55 Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
+}
+
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border: 1px solid var(--rule);
+}
+
+/* Status band. The wording carries the meaning, so the color only reinforces
+   it — never the other way round. */
+.status {
+  margin: 0 0 1.5rem;
+  padding: 0.6rem 0.85rem;
+  border-left: 3px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.status-unreviewed,
+.status-untranscribed {
+  border-left-color: var(--unreviewed);
+  color: var(--unreviewed);
+}
+
+/* Transcript body. Monospace holds the original's time columns in line, which
+   is content, not decoration. */
+.transcript {
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.transcript p {
+  margin: 0 0 1rem;
+}
+
+.uncertain {
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+}
+
+.uncertain::after {
+  content: "?";
+  font-size: 0.75em;
+  vertical-align: super;
+  opacity: 0.7;
+}
+
+.illegible {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* Two readings of the same physical lines. They are shown side by side and
+   labeled because presenting either one alone would publish a reading nobody
+   chose. */
+.seam {
+  margin: 1.25rem 0;
+  border: 1px solid var(--seam);
+  background: var(--seam-wash);
+}
+
+.seam-note,
+.seam-gap {
+  margin: 0;
+  padding: 0.6rem 0.85rem;
+  background: var(--seam);
+  color: var(--paper);
+  font-family: Charter, Georgia, serif;
+  font-size: 0.85rem;
+}
+
+.seam-gap {
+  margin: 1.25rem 0;
+}
+
+.seam-reading {
+  padding: 0.25rem 0.85rem 0.85rem;
+}
+
+.seam-reading + .seam-reading {
+  border-top: 1px dashed var(--seam);
+}
+
+.seam-reading h3 {
+  margin: 0.75rem 0 0.35rem;
+  font-family: Charter, Georgia, serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--seam);
+}
+
+.provenance {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+/* Progress. A count that only moves when someone reviews a page is the one
+   number worth putting on the front door. */
+.progress {
+  font-size: 1.05rem;
+}
+
+.progress-bar {
+  height: 6px;
+  margin: 0.5rem 0 2rem;
+  background: var(--rule);
+}
+
+.progress-bar span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+
+.index-list {
+  padding: 0;
+  list-style: none;
+}
+
+.index-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.92rem;
+}
+
+.index-list em {
+  color: var(--unreviewed);
+  font-style: normal;
+  font-size: 0.85rem;
+}
+
+a {
+  color: var(--seam);
+}
+
+a:focus-visible,
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+@media (min-width: 46rem) {
+  .seam {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .seam-note {
+    grid-column: 1 / -1;
+  }
+  .seam-reading + .seam-reading {
+    border-top: 0;
+    border-left: 1px dashed var(--seam);
+  }
+}
+
+/* Shift boundary. A rule with a date on it, because in a construction log the
+   change of crew is where responsibility for the next entries changes hands. */
+.shift {
+  margin: 1.75rem 0 1rem;
+  padding-top: 0.4rem;
+  border-top: 2px solid var(--ink);
+  font-family: Charter, Georgia, serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.transcript .shift:first-child {
+  margin-top: 0;
+}

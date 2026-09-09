@@ -1,0 +1,30 @@
+---
+permalink: "/"
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LM-5 construction log — {{ pages | countStatus("reviewed") }} of {{ pages.length }} pages reviewed</title>
+<link rel="stylesheet" href="/assets/log.css">
+</head>
+<body>
+<main>
+<h1>Apollo 11 lunar module construction log</h1>
+
+{% set done = (pages | countStatus("reviewed")) + (pages | countStatus("verified")) %}
+<p class="progress">{{ done }} of {{ pages.length }} pages checked against the scan by a human. The rest are machine transcription and contain errors.</p>
+<div class="progress-bar"><span style="width: {{ (done / pages.length * 100) | round }}%"></span></div>
+
+<ul class="index-list">
+{% for rec in pages %}
+  <li>
+    <a href="/page/{{ rec.scanId }}/">Page {{ rec.scanId }}</a>
+    {% if rec.status != "reviewed" and rec.status != "verified" %}<em>{{ rec.status }}</em>{% endif %}
+  </li>
+{% endfor %}
+</ul>
+</main>
+</body>
+</html>
