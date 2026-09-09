@@ -1,5 +1,15 @@
 /batches
 /derivatives
 /samples
-/tools
 /_site
+tools/collect.py
+tools/diff.py
+tools/harvest.py
+tools/inspect_scans.py
+tools/lm5lib.py
+tools/markers.js
+tools/prepare.py
+tools/requirements.txt
+tools/stitch.py
+tools/transcribe.py
+tools/__pycache__/lm5lib.cpython-314.pyc
