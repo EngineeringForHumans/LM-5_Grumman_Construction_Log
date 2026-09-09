@@ -15,7 +15,7 @@ permalink: "/page/{{ rec.scanId }}/"
 {% if rec.status == "unreviewed" or rec.status == "untranscribed" %}
 <meta name="robots" content="noindex">
 {% endif %}
-<link rel="stylesheet" href="{{ '/assets/log.css' | url }}">
+<link rel="stylesheet" href="/assets/log.css">
 </head>
 <body>
 <main>
@@ -24,7 +24,7 @@ permalink: "/page/{{ rec.scanId }}/"
 <p class="status status-{{ rec.status }}">{{ statusBlurb[rec.status] }}</p>
 
 {% if rec.status != "untranscribed" %}
-<img src="{{ ('/scans/' + rec.scanId + '.jpg') | url }}" alt="Scan of page {{ rec.scanId }}">
+<img src="/scans/{{ rec.scanId }}.jpg" alt="Scan of page {{ rec.scanId }}">
 <div class="transcript">{{ rec | transcript | safe }}</div>
 
 <p class="provenance">
@@ -35,7 +35,7 @@ conventions {{ rec.provenance.conventionsVersion }}{% if rec.provenance.pass %},
 Source: <code>{{ rec.sourceFile }}</code>.
 </p>
 
-<p><a href="{{ ('/page/' + rec.scanId + '/transcript.txt') | url }}">Plain text</a></p>
+<p><a href="/page/{{ rec.scanId }}/transcript.txt">Plain text</a></p>
 {% else %}
 <p>This page has no transcript yet.</p>
 {% endif %}

@@ -7,7 +7,7 @@ permalink: "/"
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LM-5 construction log — {{ pages | countStatus("reviewed") }} of {{ pages.length }} pages reviewed</title>
-<link rel="stylesheet" href="{{ '/assets/log.css' | url }}">
+<link rel="stylesheet" href="/assets/log.css">
 </head>
 <body>
 <main>
@@ -20,7 +20,7 @@ permalink: "/"
 <ul class="index-list">
 {% for rec in pages %}
   <li>
-    <a href="{{ ('/page/' + rec.scanId + '/') | url }}">Page {{ rec.scanId }}</a>
+    <a href="/page/{{ rec.scanId }}/">Page {{ rec.scanId }}</a>
     {% if rec.status != "reviewed" and rec.status != "verified" %}<em>{{ rec.status }}</em>{% endif %}
   </li>
 {% endfor %}

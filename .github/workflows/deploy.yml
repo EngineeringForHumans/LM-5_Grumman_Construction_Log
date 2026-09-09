@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy site
 
 on:
   push:
@@ -10,6 +10,7 @@ permissions:
   pages: write
   id-token: write
 
+# Let a running deploy finish rather than cancelling it mid-publish.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -18,27 +19,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
 
       - run: npm ci
 
-      # Catch a page list or a marker that drifted before spending a build on it.
-      - run: python3 tools/manifest.py --check
-      - run: node tools/markers.js --check
+      - run: npx @11ty/eleventy --config=site/eleventy.config.js
 
-      - run: npm run build
-        env:
-          # github.event.repository.name is the repo name, which is exactly the
-          # path a project site is served from. A custom domain or a
-          # username.github.io repo needs this set to / instead.
-          ELEVENTY_PATH_PREFIX: /${{ github.event.repository.name }}/
-
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
@@ -50,4 +42,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

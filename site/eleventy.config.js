@@ -1,10 +1,5 @@
 import { renderTranscript, renderPlainText } from "./_lib/transcript.js";
 
-// GitHub Pages serves a project site from /repo-name/, a user site and a
-// custom domain from /. The prefix therefore belongs to the deploy, not the
-// repo, so it comes from the environment and defaults to root for local work.
-const pathPrefix = process.env.ELEVENTY_PATH_PREFIX ?? "/";
-
 export default function (eleventyConfig) {
   eleventyConfig.setInputDirectory("site");
   eleventyConfig.setOutputDirectory("_site");
@@ -29,8 +24,4 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("countStatus", (pages, status) =>
     pages.filter((p) => p.status === status).length,
   );
-
-  // Returned config wins over setter methods, and --pathprefix on the command
-  // line wins over both.
-  return { pathPrefix };
 }
