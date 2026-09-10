@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<link rel="stylesheet" href="{{ '/assets/style.css' | url }}">
+{%- for sheet in styles %}
+<link rel="stylesheet" href="{{ ('/assets/' + sheet) | url }}">
+{%- endfor %}
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="{{ '/assets/fonts/IBMPlexSans-Regular.woff2' | url }}">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="wrap">
+    <span class="masthead-id"><a href="{{ '/' | url }}">{{ archive.shortTitle }}</a></span>
+    <nav aria-label="Sections">
+      <a href="{{ '/about/' | url }}">About</a>
+      <a href="{{ '/provenance/' | url }}">Provenance</a>
+      <a href="{{ '/conventions/' | url }}">Conventions</a>
+      <a href="{{ '/data/' | url }}">Data</a>
+      <a href="{{ archive.repo }}">Source</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+{{ content | safe }}
+</main>
+
+<footer class="colophon">
+  <div class="wrap">
+    <div>
+      <h2>Provenance</h2>
+      <p>Where the pages came from, who has held them, and what rights apply.</p>
+      <a href="{{ '/provenance/' | url }}">Read the chain of custody</a>
+    </div>
+    <div>
+      <h2>How to cite</h2>
+      <p>Every page has a permanent address and a plain-text transcript.</p>
+      <a href="{{ '/about/#citing' | url }}">Citation formats</a>
+    </div>
+    <div>
+      <h2>Get the data</h2>
+      <p>Transcripts, structured records, and the scan manifest, as files.</p>
+      <a href="{{ '/data/' | url }}">Download the corpus</a>
+    </div>
+    <div>
+      <h2>Contribute</h2>
+      <p>Corrections are welcome. Transcription conventions are documented.</p>
+      <a href="{{ archive.repo }}">Open the repository</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
