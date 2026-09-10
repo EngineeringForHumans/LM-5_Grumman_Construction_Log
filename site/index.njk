@@ -1,30 +1,72 @@
 ---
+layout: base.njk
 permalink: "/"
+eleventyComputed:
+  title: "{{ archive.title }}"
+  description: "{{ archive.description }}"
 ---
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LM-5 construction log — {{ pages | countStatus("reviewed") }} of {{ pages.length }} pages reviewed</title>
-<link rel="stylesheet" href="{{ '/assets/log.css' | url }}">
-</head>
-<body>
-<main>
-<h1>Apollo 11 lunar module construction log</h1>
+<div class="wrap">
 
-{% set done = (pages | countStatus("reviewed")) + (pages | countStatus("verified")) %}
-<p class="progress">{{ done }} of {{ pages.length }} pages checked against the scan by a human. The rest are machine transcription and contain errors.</p>
-<div class="progress-bar"><span style="width: {{ (done / pages.length * 100) | round }}%"></span></div>
+  <div class="titleblock">
+    <h1>{{ archive.title }}</h1>
+    <dl>
+      {%- for fact in archive.facts %}
+      <div>
+        <dt>{{ fact.label }}</dt>
+        <dd>{{ fact.value }}</dd>
+      </div>
+      {%- endfor %}
+    </dl>
+  </div>
 
-<ul class="index-list">
-{% for rec in pages %}
-  <li>
-    <a href="{{ ('/page/' + rec.scanId + '/') | url }}">Page {{ rec.scanId }}</a>
-    {% if rec.status != "reviewed" and rec.status != "verified" %}<em>{{ rec.status }}</em>{% endif %}
-  </li>
-{% endfor %}
-</ul>
-</main>
-</body>
-</html>
+  <div class="lede">
+    <p>{{ archive.description }}</p>
+    <p>The log records what was built, when, by whom, and what went wrong.
+      Each sheet here is a scan of the original alongside a transcription that
+      follows the marks on the page as closely as the medium allows.</p>
+  </div>
+
+  <section class="search">
+    <h2>Search the log</h2>
+    <label for="q" class="sr-only">Search the transcribed log</label>
+    <input type="search" id="q" autocomplete="off" spellcheck="false"
+           placeholder="Search {{ pages | length }} pages of transcribed entries"
+           aria-describedby="search-note">
+    <p class="search-note" id="search-note">Matches text as it appears on the page, marks and all.</p>
+    <ul class="results" id="results" aria-live="polite"></ul>
+  </section>
+
+  {%- set readyBrowse = browse | selectattr("ready") | list %}
+  {%- if readyBrowse | length %}
+  <section>
+    <h2>Browse</h2>
+    <ul class="browse">
+      {%- for entry in readyBrowse %}
+      <li>
+        <a href="{{ entry.href | url }}">
+          <b>{{ entry.label }}</b>
+          <span>{{ entry.blurb }}</span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
+  <section>
+    <h2>Every page</h2>
+    <ul class="pages">
+      {%- for record in pages %}
+      <li>
+        <a href="{{ ('/page/' + record.number + '/') | url }}">
+          <img src="{{ ('/thumbs/' + record.scanId + '.jpg') | url }}"
+               alt="Sheet {{ record.number }}" width="180" height="240" loading="lazy" decoding="async">
+          <span>{{ record.number }}</span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+
+</div>
+<script src="{{ '/assets/search.js' | url }}" data-index="{{ '/search-index.json' | url }}" defer></script>

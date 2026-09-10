@@ -1,0 +1,12 @@
+{
+  "title": "The Grumman construction log for LM-5",
+  "shortTitle": "LM-5 construction log",
+  "description": "A page-by-page transcription of the shop-floor log kept during the construction of Lunar Module 5, the vehicle that landed on the Moon as Eagle.",
+  "repo": "https://github.com/engineeringforhumans/LM-5_Grumman_Construction_Log",
+  "facts": [
+    { "label": "Vehicle", "value": "LM-5" },
+    { "label": "Contractor", "value": "Grumman" },
+    { "label": "Sheets", "value": "130" },
+    { "label": "Covering", "value": "TBC" }
+  ]
+}

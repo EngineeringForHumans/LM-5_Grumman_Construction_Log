@@ -1,0 +1,84 @@
+/* Transcript rendering.
+   Default: original lines run together as prose.
+   Toggled:  each original line sits on its own row, numbered. */
+
+.transcript-view {
+  --rule: #d8d3c8;
+  --muted: #6b6559;
+}
+
+/* The control */
+
+.line-breaks-label {
+  font-size: 0.875rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+/* The toggle must stay a sibling of .transcript for the selectors below to
+   work. Don't wrap it in a container. */
+.line-breaks-toggle {
+  margin-inline-end: 0.5ch;
+}
+
+.line-breaks-toggle ~ .transcript {
+  margin-block-start: 1.25rem;
+}
+
+.line-breaks-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* The text */
+
+.transcript {
+  max-width: 38em;
+  font-family: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  hyphens: none;
+}
+
+.transcript-block {
+  margin-block: 0 1.25em;
+}
+
+.transcript .line {
+  display: inline;
+}
+
+/* Diplomatic view: one row per original line, with line numbers in the margin
+   and runs of whitespace preserved so column alignment survives. */
+
+.line-breaks-toggle:checked ~ .transcript .line {
+  display: block;
+  position: relative;
+  padding-inline-start: 3.5ch;
+  white-space: pre-wrap;
+  line-height: 1.9;
+}
+
+.line-breaks-toggle:checked ~ .transcript .line::before {
+  content: attr(data-line);
+  position: absolute;
+  inset-inline-start: 0;
+  width: 2.5ch;
+  text-align: end;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75em;
+  color: var(--muted);
+  user-select: none;
+}
+
+@media (max-width: 30rem) {
+  .line-breaks-toggle:checked ~ .transcript .line {
+    padding-inline-start: 0;
+  }
+  .line-breaks-toggle:checked ~ .transcript .line::before {
+    position: static;
+    display: inline-block;
+    width: auto;
+    margin-inline-end: 1ch;
+  }
+}

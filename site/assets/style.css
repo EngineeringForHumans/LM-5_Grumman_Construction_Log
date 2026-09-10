@@ -1,0 +1,271 @@
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("fonts/IBMPlexSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("fonts/IBMPlexSans-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("fonts/IBMPlexMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --sheet: #e4e5df;
+  --card: #f5f5f1;
+  --ink: #1e2321;
+  --ink-2: #5a605b;
+  --rule: #bfc4b9;
+  --rule-strong: #8d9389;
+  --stamp: #9a3b1f;
+
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --measure: 66ch;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--sheet);
+  color: var(--ink);
+  font: 400 1rem/1.6 var(--sans);
+}
+
+a { color: inherit; text-decoration-color: var(--rule-strong); text-underline-offset: 0.18em; }
+a:hover { text-decoration-color: var(--stamp); }
+
+:focus-visible {
+  outline: 2px solid var(--stamp);
+  outline-offset: 2px;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: var(--gutter);
+  top: 0.5rem;
+  z-index: 10;
+  background: var(--card);
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--ink);
+}
+
+.wrap {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* Masthead ------------------------------------------------------------- */
+
+.masthead {
+  border-bottom: 1px solid var(--rule-strong);
+  background: var(--card);
+}
+.masthead .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-block: 0.7rem;
+}
+.masthead-id {
+  font: 400 0.8rem/1 var(--mono);
+  color: var(--ink-2);
+}
+.masthead nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  font-size: 0.9rem;
+}
+.masthead nav a { text-decoration: none; }
+.masthead nav a:hover { text-decoration: underline; }
+
+/* Title block ---------------------------------------------------------- */
+
+.titleblock {
+  border: 1px solid var(--rule-strong);
+  background: var(--card);
+  margin: var(--gutter) 0;
+}
+.titleblock h1 {
+  margin: 0;
+  padding: 1.4rem 1.25rem 1.1rem;
+  font-size: clamp(1.6rem, 4.2vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+  border-bottom: 1px solid var(--rule);
+}
+.titleblock dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  margin: 0;
+}
+.titleblock div {
+  padding: 0.6rem 1.25rem 0.7rem;
+  border-right: 1px solid var(--rule);
+}
+.titleblock div:last-child { border-right: 0; }
+.titleblock dt {
+  font-size: 0.72rem;
+  color: var(--ink-2);
+  letter-spacing: 0.02em;
+}
+.titleblock dd {
+  margin: 0.15rem 0 0;
+  font: 400 0.95rem/1.3 var(--mono);
+}
+
+/* Prose ---------------------------------------------------------------- */
+
+.lede {
+  max-width: var(--measure);
+  margin: 0 0 var(--gutter);
+  font-size: 1.08rem;
+}
+.lede p { margin: 0 0 0.9rem; }
+
+section { margin-block: clamp(2rem, 6vw, 3.5rem); }
+
+h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.9rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+/* Search --------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.search input {
+  max-width: var(--measure);
+  width: 100%;
+  font: 400 1.05rem/1 var(--sans);
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  padding: 0.75rem 0.85rem;
+}
+.search input::placeholder { color: var(--ink-2); }
+.search-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+.results { margin: 1.25rem 0 0; padding: 0; list-style: none; max-width: var(--measure); }
+.results li { border-top: 1px solid var(--rule); padding: 0.7rem 0; }
+.results a { font: 400 0.85rem/1 var(--mono); text-decoration: none; }
+.results a:hover { text-decoration: underline; }
+.results p { margin: 0.3rem 0 0; font-size: 0.92rem; color: var(--ink-2); }
+.results mark { background: #e9d9a8; color: inherit; }
+
+/* Browse --------------------------------------------------------------- */
+
+.browse {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.browse li { background: var(--card); }
+.browse a {
+  display: block;
+  padding: 0.9rem 1rem 1rem;
+  height: 100%;
+  text-decoration: none;
+}
+.browse a:hover { background: #fbfbf8; }
+.browse b { font-weight: 600; }
+.browse span { display: block; margin-top: 0.2rem; font-size: 0.85rem; color: var(--ink-2); }
+
+/* Page grid ------------------------------------------------------------ */
+
+.pages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pages a {
+  display: block;
+  text-decoration: none;
+}
+.pages img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+}
+.pages a:hover img, .pages a:focus-visible img { border-color: var(--stamp); }
+.pages span {
+  display: block;
+  margin-top: 0.3rem;
+  font: 400 0.75rem/1 var(--mono);
+  color: var(--ink-2);
+}
+
+/* Colophon ------------------------------------------------------------- */
+
+.colophon {
+  margin-top: clamp(2.5rem, 7vw, 4rem);
+  border-top: 1px solid var(--rule-strong);
+  background: var(--card);
+}
+.colophon .wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1.5rem;
+  padding-block: 1.75rem 2.25rem;
+}
+.colophon h2 {
+  font-size: 0.9rem;
+  border: 0;
+  padding: 0;
+  margin: 0 0 0.35rem;
+}
+.colophon p { margin: 0; font-size: 0.88rem; color: var(--ink-2); }
+.colophon a { display: inline-block; margin-top: 0.4rem; font-size: 0.88rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
