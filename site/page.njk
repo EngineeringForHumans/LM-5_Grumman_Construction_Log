@@ -2,29 +2,123 @@
 pagination:
   data: pages
   size: 1
-  alias: page_record
-permalink: "/page/{{ page_record.number }}/"
+  alias: record
+permalink: "/page/{{ record.number }}/"
+layout: base.njk
+styles: ["page.css"]
+eleventyComputed:
+  title: "Sheet {{ record.number }} — {{ archive.shortTitle }}"
+  description: "Scan and transcript of sheet {{ record.number }} of the {{ archive.title }}."
+  prev: "{{ pages[pagination.pageNumber - 1].number if pagination.pageNumber > 0 else '' }}"
+  next: "{{ pages[pagination.pageNumber + 1].number if pagination.pageNumber + 1 < pages.length else '' }}"
 ---
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Page {{ page_record.number }}</title>
-<link rel="stylesheet" href="{{ '/assets/transcript.css' | url }}">
-</head>
-<body>
-<h1>Page {{ page_record.number }}</h1>
-<p>Status: {{ page_record.status }}</p>
+<script>document.documentElement.className += " js";</script>
 
-<img src="{{ ('/scans/' + page_record.scanId + '.jpg') | url }}" alt="Scan of page {{ page_record.number }}">
+<div class="wrap">
 
-<div class="transcript-view">
-  <input type="checkbox" id="line-breaks" class="line-breaks-toggle">
-  <label class="line-breaks-label" for="line-breaks">Show original line breaks</label>
-  <div class="transcript">{{ page_record.text | transcript | safe }}</div>
+  <div class="titleblock">
+    <h1>Sheet {{ record.number }}</h1>
+    <dl>
+      {%- if record.date %}
+      <div>
+        <dt>Date</dt>
+        <dd><a href="{{ ('/dates/#' + (record.date | isodate)) | url }}">{{ record.date | isodate }}</a></dd>
+      </div>
+      {%- endif %}
+      {%- if record.shift %}
+      <div><dt>Shift</dt><dd>{{ record.shift }}</dd></div>
+      {%- endif %}
+      <div><dt>Scan</dt><dd>{{ record.scanId }}</dd></div>
+    </dl>
+  </div>
+
+  <div class="sheet">
+
+    <section class="scan" aria-label="Scan of sheet {{ record.number }}">
+      <div class="scan-sticky">
+        <div
+          class="scan-viewer"
+          id="scan-viewer"
+          data-tilesource="{{ ('/tiles/' + record.scanId + '.dzi') | url }}"
+          data-prefix="{{ '/assets/openseadragon/images/' | url }}">
+        </div>
+        <noscript>
+          <a class="scan-link" href="{{ ('/scans/' + record.scanId + '.jpg') | url }}">Open the scan image</a>
+        </noscript>
+      </div>
+    </section>
+
+    <section class="reading">
+
+      <a class="scan-link" href="{{ ('/scans/' + record.scanId + '.jpg') | url }}" target="_blank" rel="noopener">
+        Open the scan
+      </a>
+
+      <div class="reading-head">
+        <h2>Transcript</h2>
+        <div class="text-toggle" role="group" aria-label="Transcript rendering">
+          <button type="button" data-text="diplomatic" aria-pressed="true">Diplomatic</button>
+          <button type="button" data-text="clean" aria-pressed="false">Clean</button>
+        </div>
+      </div>
+
+      {% if record.text %}
+        <div class="transcript" data-variant="diplomatic">{{ record.text | transcript | safe }}</div>
+        <div class="transcript" data-variant="clean" hidden>{{ record.text | clean | safe }}</div>
+
+        <dl class="markup-key" data-variant="diplomatic">
+          <div><dt><s>struck</s></dt><dd>Struck through on the sheet</dd></div>
+          <div><dt><span class="uncertain">word</span></dt><dd>Uncertain reading</dd></div>
+        </dl>
+      {% else %}
+        <p class="not-yet">This sheet isn&rsquo;t transcribed yet. The scan is beside it.</p>
+      {% endif %}
+
+      {% if record.notes %}
+      <div class="notes">
+        <h2>Editorial notes</h2>
+        <ol>
+          {%- for note in record.notes %}
+          <li id="note-{{ loop.index }}">{{ note.text }}</li>
+          {%- endfor %}
+        </ol>
+      </div>
+      {% endif %}
+
+      <nav class="sheet-nav" aria-label="Sheets">
+        {%- if prev %}
+        <a href="{{ ('/page/' + prev + '/') | url }}" rel="prev"><span>Previous</span>Sheet {{ prev }}</a>
+        {%- else %}<span></span>{% endif %}
+        {%- if next %}
+        <a class="next" href="{{ ('/page/' + next + '/') | url }}" rel="next"><span>Next</span>Sheet {{ next }}</a>
+        {%- endif %}
+      </nav>
+
+    </section>
+
+    {%- set terms = glossary.byScan[record.scanId] %}
+    {%- if terms.length %}
+    <aside class="glossary" aria-labelledby="glossary-heading">
+      <h2 id="glossary-heading">Glossary</h2>
+      <ul>
+        {%- for entry in terms %}
+        <li><a href="{{ ('/keywords/#' + entry.id) | url }}" title="{{ entry.expansion or entry.definition }}">{{ entry.term }}</a></li>
+        {%- endfor %}
+      </ul>
+      <p>Terms on this sheet, in the keyword index.</p>
+    </aside>
+    {%- endif %}
+
+  </div>
+
+  <div class="sheet-actions">
+    <a href="{{ ('/page/' + record.number + '/transcript.txt') | url }}">Plain text</a>
+    <a href="{{ ('/scans/' + record.scanId + '.jpg') | url }}" download>Download the scan</a>
+    <a href="{{ '/about/#citing' | url }}">How to cite</a>
+    <span class="sheet-id">{{ record.scanId }}</span>
+  </div>
+
 </div>
 
-<p><a href="{{ ('/page/' + page_record.number + '/transcript.txt') | url }}">Plain text transcript</a></p>
-</body>
-</html>
+<script src="{{ '/assets/openseadragon/openseadragon.min.js' | url }}" defer></script>
+<script src="{{ '/assets/page.js' | url }}" defer></script>

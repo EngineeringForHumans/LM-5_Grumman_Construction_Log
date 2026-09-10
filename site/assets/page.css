@@ -1,0 +1,240 @@
+/* Sheet view. Extends style.css; defines no tokens of its own. */
+
+.sheet {
+  display: grid;
+  gap: var(--gutter);
+  margin-block: var(--gutter);
+}
+
+.sheet section {
+  margin-block: 0;
+}
+
+.sheet h2 {
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* Scan ----------------------------------------------------------------- */
+
+.scan { display: none; }
+
+.scan-viewer {
+  aspect-ratio: 3 / 4;
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+}
+
+.scan-link {
+  display: block;
+  margin-bottom: 1.25rem;
+  padding: 0.7rem 0.85rem;
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  font: 400 0.9rem/1 var(--sans);
+  text-decoration: none;
+}
+
+.scan-link:hover { border-color: var(--stamp); }
+
+/* Transcript ----------------------------------------------------------- */
+
+.reading-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: var(--measure);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.text-toggle { display: none; }
+
+.js .text-toggle {
+  display: inline-flex;
+  border: 1px solid var(--rule-strong);
+}
+
+.text-toggle button {
+  margin: 0;
+  padding: 0.22rem 0.6rem;
+  border: 0;
+  background: transparent;
+  font: 400 0.78rem/1.3 var(--mono);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.text-toggle button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--card);
+}
+
+.transcript {
+  max-width: var(--measure);
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.transcript p { margin: 0 0 0.9rem; }
+.transcript s { color: var(--ink-2); }
+
+.uncertain {
+  border-bottom: 1px dotted var(--stamp);
+  cursor: help;
+}
+
+.illegible {
+  color: var(--stamp);
+  font-style: italic;
+}
+
+.not-yet {
+  max-width: var(--measure);
+  color: var(--ink-2);
+}
+
+.markup-key {
+  max-width: var(--measure);
+  margin: 1.4rem 0 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.markup-key div {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.markup-key dt,
+.markup-key dd { margin: 0; }
+.markup-key dt { min-width: 5rem; }
+
+/* Notes ---------------------------------------------------------------- */
+
+.notes {
+  max-width: var(--measure);
+  margin-top: 2rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--rule);
+}
+
+.notes ol {
+  margin: 0.6rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.92rem;
+}
+
+/* Sheet navigation ----------------------------------------------------- */
+
+.sheet-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1px;
+  max-width: var(--measure);
+  margin-top: 2.25rem;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+.sheet-nav a {
+  flex: 1;
+  padding: 0.75rem 0.9rem 0.85rem;
+  background: var(--card);
+  text-decoration: none;
+  font: 400 0.85rem/1.2 var(--mono);
+}
+
+.sheet-nav a:hover { background: #fbfbf8; }
+.sheet-nav .next { text-align: right; }
+
+.sheet-nav span {
+  display: block;
+  margin-bottom: 0.25rem;
+  font: 400 0.72rem/1 var(--sans);
+  color: var(--ink-2);
+}
+
+/* Glossary ------------------------------------------------------------- */
+
+.glossary ul {
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.glossary li {
+  border-top: 1px solid var(--rule);
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+.glossary a { text-decoration: none; }
+.glossary a:hover { text-decoration: underline; }
+
+.glossary p {
+  margin: 0.9rem 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+/* Actions -------------------------------------------------------------- */
+
+.sheet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 1.25rem;
+  margin-bottom: var(--gutter);
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--rule-strong);
+  font-size: 0.88rem;
+}
+
+.sheet-id {
+  margin-left: auto;
+  font: 400 0.8rem/1 var(--mono);
+  color: var(--ink-2);
+}
+
+/* Two and three column ------------------------------------------------- */
+
+@media (min-width: 48em) {
+  .sheet {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+  }
+  .scan { display: block; }
+  .reading .scan-link { display: none; }
+  .scan-sticky {
+    position: sticky;
+    top: var(--gutter);
+  }
+  .glossary {
+    grid-column: 2;
+    max-width: var(--measure);
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--rule-strong);
+  }
+}
+
+@media (min-width: 64em) {
+  .sheet {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr) minmax(9rem, 3fr);
+  }
+  .glossary {
+    grid-column: 3;
+    grid-row: 1;
+    max-width: none;
+    padding-top: 0;
+    border-top: 0;
+  }
+}

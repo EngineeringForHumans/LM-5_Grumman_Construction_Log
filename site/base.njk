@@ -6,6 +6,9 @@
 <title>{{ title }}</title>
 <meta name="description" content="{{ description }}">
 <link rel="stylesheet" href="{{ '/assets/style.css' | url }}">
+{%- for sheet in styles %}
+<link rel="stylesheet" href="{{ ('/assets/' + sheet) | url }}">
+{%- endfor %}
 <link rel="preload" as="font" type="font/woff2" crossorigin
       href="{{ '/assets/fonts/IBMPlexSans-Regular.woff2' | url }}">
 </head>
